@@ -24,6 +24,11 @@
   font-weight: bold;
 }
 
+.previous-month {
+  background-color: #f0f0f0;
+  color: rgb(165, 164, 164);
+}
+
 .day .today {
   border-radius: 5px;
   color: red;

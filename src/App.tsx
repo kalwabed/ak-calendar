@@ -59,8 +59,8 @@ function App() {
       </header>
 
       <div className="date-grid">
-        {calendar.map(({ day, isToday }, i) => (
-          <div key={i} className="day">
+        {calendar.map(({ day, isToday, isCurrentMonth }, i) => (
+          <div key={day + i} className={`day ${!isCurrentMonth && 'previous-month'}`}>
             <p className={isToday ? 'today' : ''}>{day}</p>
           </div>
         ))}
