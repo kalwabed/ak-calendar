@@ -1,0 +1,30 @@
+.App {
+  text-align: center;
+}
+
+.header-grid,
+.date-grid {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(150px, 1fr));
+  padding: 10px;
+}
+
+.header-grid p {
+  font-weight: 500;
+}
+
+.day {
+  min-height: 165px;
+  border: 1px solid black;
+}
+
+.day p {
+  text-align: end;
+  padding: 10px;
+  font-weight: bold;
+}
+
+.day .today {
+  border-radius: 5px;
+  color: red;
+}
