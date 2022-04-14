@@ -1,7 +1,8 @@
 import { useMemo, useState } from 'react'
-import { Box, Text, chakra, useDisclosure } from '@chakra-ui/react'
+import { Box, Text, chakra, useDisclosure, Button, VStack } from '@chakra-ui/react'
 
 import InputDialog from './InputDialog'
+import { Calendar } from './types'
 
 function App() {
   const { isOpen, onClose, onOpen } = useDisclosure()
@@ -21,7 +22,7 @@ function App() {
     const daysInMonth = lastDayOfMonth.getDate()
     const daysInPreviousMonth = new Date(currentYear, currentMonth, 0).getDate()
     const daysInPreviousMonthIndex = firstDayOfMonthIndex === 0 ? 6 : firstDayOfMonthIndex - 1
-    const calendar = []
+    const calendar: Calendar[] = []
 
     for (let i = 0; i < 42; i++) {
       if (i < firstDayOfMonthIndex) {
@@ -44,7 +45,11 @@ function App() {
           isCurrentMonth: true,
           isCurrentYear: true,
           isToday: new Date().getDate() === i - firstDayOfMonthIndex + 1,
-          events: []
+          events: [
+            { color: '#FFC107', title: 'Event 1', invitees: ['john@kane.com'], time: '10:00 AM' },
+            { color: '#FFC107', title: 'Event 2', invitees: ['john@kane.com'], time: '10:00 AM' },
+            { color: '#FFC107', title: 'Event 3', invitees: ['john@kane.com'], time: '10:00 AM' }
+          ]
         })
       }
     }
@@ -74,27 +79,50 @@ function App() {
         <p>Sunday</p>
       </Box>
 
-      <Box textAlign="center" display="grid" gridTemplateColumns="repeat(7, 1fr)" px={8} py={6}>
+      <Box textAlign="center" display="grid" gridTemplateColumns="repeat(7, minmax(250px, 1fr))" px={8} py={6}>
         <InputDialog isOpen={isOpen} onClose={onClose} day={selectedDay} />
 
-        {calendar.map(({ day, isToday, isCurrentMonth }, i) => (
-          <chakra.button
-            key={day + i}
-            minHeight="165px"
-            border="1px solid black"
-            pos="relative"
-            display="flex"
-            flexDir="column"
-            w="full"
-            cursor="pointer"
-            onClick={() => handleOpenInputModal(day)}
-            bgColor={!isCurrentMonth && '#f0f0f0'}
-            color={!isCurrentMonth && 'rgb(165, 164, 164)'}
-          >
-            <Text alignSelf="flex-end" padding={4} fontWeight="bold" rounded={isToday && 'md'} color={isToday && 'red'}>
-              {day}
-            </Text>
-          </chakra.button>
+        {calendar.map((cal, i) => (
+          <Box key={cal.day + i} minHeight="165px" pos="relative" border="1px solid black">
+            <chakra.button
+              display="flex"
+              flexDir="column"
+              pos="absolute"
+              inset={0}
+              w="full"
+              onClick={() => handleOpenInputModal(cal.day)}
+              bgColor={!cal.isCurrentMonth && '#f0f0f0'}
+              color={!cal.isCurrentMonth && 'rgb(165, 164, 164)'}
+            >
+              <Text
+                alignSelf="flex-end"
+                padding={4}
+                fontWeight="bold"
+                rounded={cal.isToday && 'md'}
+                color={cal.isToday && 'red'}
+              >
+                {cal.day}
+              </Text>
+            </chakra.button>
+            <VStack mt={14} align="center" justify="center" px={2}>
+              {cal.events.map(ev => (
+                <Button
+                  isFullWidth
+                  key={ev.title}
+                  variant="ghost"
+                  size="xs"
+                  onClick={() => alert('ye')}
+                  justifyContent="start"
+                  overflow="hidden"
+                  textOverflow="ellipsis"
+                  whiteSpace="nowrap"
+                  leftIcon={<chakra.span bgColor="red" rounded="full" p={1} />}
+                >
+                  awakw{ev.title} Lorem ipsum dolor sit, amet consectetur adipisicing elit. Labore, similique.
+                </Button>
+              ))}
+            </VStack>
+          </Box>
         ))}
       </Box>
     </div>

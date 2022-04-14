@@ -8,8 +8,15 @@ import {
   ModalHeader,
   ModalOverlay
 } from '@chakra-ui/react'
+import { Calendar } from './types'
 
-const InputDialog = ({ isOpen, onClose, day }) => {
+interface InputDialogProps {
+  isOpen: boolean
+  onClose: () => void
+  day: number
+}
+
+const InputDialog = ({ isOpen, onClose, day }: InputDialogProps) => {
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
       <ModalOverlay />
