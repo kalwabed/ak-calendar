@@ -43,6 +43,9 @@ const DateContent = ({
             whiteSpace="nowrap"
             leftIcon={<chakra.span bgColor={ev.color} rounded="full" p={1} />}
           >
+            <Text as="span" fontWeight="normal" mr={1}>
+              {ev.time.start}
+            </Text>
             {ev.name}
           </Button>
         ))}

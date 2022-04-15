@@ -14,7 +14,7 @@ import {
   useToast,
   VStack
 } from '@chakra-ui/react'
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import { OnChangeValue } from 'react-select'
 import Select from 'react-select/creatable'
 
@@ -32,28 +32,26 @@ interface UpdateDialogProps {
 const UpdateDialog = ({ isOpen, onClose, day, event }: UpdateDialogProps) => {
   if (!event || !day) return null
 
-  const [inviteesEmail, setInviteesEmail] = useState([])
+  const [inviteesEmail, setInviteesEmail] = useState(event.invitees)
   const [name, setName] = useState(event.name)
   const [startTime, setStartTime] = useState(event.time.start)
   const [finishTime, setFinishTime] = useState(event.time.end)
   const { updateEvent } = useCalendar()
   const toast = useToast()
 
-  const options = []
-
-  day?.events?.forEach(event => {
-    return event.invitees.forEach(invitee => {
-      if (!options.find(option => option.value === invitee)) {
-        options.push({ value: invitee, label: invitee })
-      }
-    })
-  })
+  const options = useMemo(() => {
+    return event.invitees.map(email => ({ value: email, label: email }))
+  }, [event])
 
   const handleOnChange = (newValue: OnChangeValue<{ value: string; label: string }, true>) => {
     setInviteesEmail(newValue.map(({ value }) => value))
   }
 
   const handleOnSubmit = () => {
+    console.log('name', name)
+    console.log('startTime', startTime)
+    console.log('finishTime', finishTime)
+    console.log('inviteesEmail', inviteesEmail)
     if (!name || !startTime || !finishTime || inviteesEmail.length === 0) {
       toast({ status: 'error', title: 'Please fill all fields', position: 'top' })
       return
@@ -85,11 +83,11 @@ const UpdateDialog = ({ isOpen, onClose, day, event }: UpdateDialogProps) => {
             <HStack justify="space-between" w="full">
               <FormControl isRequired>
                 <FormLabel id="start-time">Start</FormLabel>
-                <Input value={event.time.start} onChange={e => setStartTime(e.target.value)} type="time" />
+                <Input defaultValue={event.time.start} onChange={e => setStartTime(e.target.value)} type="time" />
               </FormControl>
               <FormControl isRequired>
                 <FormLabel id="finish-time">Finish</FormLabel>
-                <Input value={event.time.end} onChange={e => setFinishTime(e.target.value)} type="time" />
+                <Input defaultValue={event.time.end} onChange={e => setFinishTime(e.target.value)} type="time" />
               </FormControl>
             </HStack>
 
