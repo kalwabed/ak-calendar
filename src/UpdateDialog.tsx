@@ -2,6 +2,7 @@ import {
   Button,
   FormControl,
   FormLabel,
+  HStack,
   Input,
   Modal,
   ModalBody,
@@ -33,7 +34,8 @@ const UpdateDialog = ({ isOpen, onClose, day, event }: UpdateDialogProps) => {
 
   const [inviteesEmail, setInviteesEmail] = useState([])
   const [name, setName] = useState(event.name)
-  const [time, setTime] = useState(event.time)
+  const [startTime, setStartTime] = useState(event.time.start)
+  const [finishTime, setFinishTime] = useState(event.time.end)
   const { updateEvent } = useCalendar()
   const toast = useToast()
 
@@ -52,12 +54,12 @@ const UpdateDialog = ({ isOpen, onClose, day, event }: UpdateDialogProps) => {
   }
 
   const handleOnSubmit = () => {
-    if (!name || !time || inviteesEmail.length === 0) {
+    if (!name || !startTime || !finishTime || inviteesEmail.length === 0) {
       toast({ status: 'error', title: 'Please fill all fields', position: 'top' })
       return
     }
 
-    updateEvent({ ...event, name, time, invitees: inviteesEmail }, day.id)
+    updateEvent({ ...event, name, time: { start: startTime, end: finishTime }, invitees: inviteesEmail }, day.id)
     onClose()
     toast({ status: 'success', title: 'Event updated', position: 'top' })
   }
@@ -80,10 +82,16 @@ const UpdateDialog = ({ isOpen, onClose, day, event }: UpdateDialogProps) => {
               />
             </FormControl>
 
-            <FormControl>
-              <FormLabel id="time">Time</FormLabel>
-              <Input value={time} onChange={e => setTime(e.target.value)} type="time" />
-            </FormControl>
+            <HStack justify="space-between" w="full">
+              <FormControl isRequired>
+                <FormLabel id="start-time">Start</FormLabel>
+                <Input value={event.time.start} onChange={e => setStartTime(e.target.value)} type="time" />
+              </FormControl>
+              <FormControl isRequired>
+                <FormLabel id="finish-time">Finish</FormLabel>
+                <Input value={event.time.end} onChange={e => setFinishTime(e.target.value)} type="time" />
+              </FormControl>
+            </HStack>
 
             <FormControl>
               <FormLabel htmlFor="emails">Invitees</FormLabel>

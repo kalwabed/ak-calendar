@@ -2,6 +2,7 @@ import {
   Button,
   FormControl,
   FormLabel,
+  HStack,
   Input,
   Modal,
   ModalBody,
@@ -29,7 +30,8 @@ interface InputDialogProps {
 const InputDialog = ({ isOpen, onClose, day }: InputDialogProps) => {
   const [inviteesEmail, setInviteesEmail] = useState([])
   const [name, setName] = useState('')
-  const [time, setTime] = useState('')
+  const [startTime, setStartTime] = useState('')
+  const [finishTime, setFinishTime] = useState('')
   const { addEvent } = useCalendar()
   const toast = useToast()
 
@@ -43,12 +45,12 @@ const InputDialog = ({ isOpen, onClose, day }: InputDialogProps) => {
   }
 
   const handleOnSubmit = () => {
-    if (!name || !time || inviteesEmail.length === 0) {
+    if (!name || !startTime || !finishTime || inviteesEmail.length === 0) {
       toast({ status: 'error', title: 'Please fill all fields', position: 'top' })
       return
     }
 
-    addEvent({ name, time, invitees: inviteesEmail }, day.id)
+    addEvent({ name, time: { start: startTime, end: finishTime }, invitees: inviteesEmail }, day.id)
     onClose()
     toast({ status: 'success', title: 'Event added', position: 'top' })
   }
@@ -66,10 +68,16 @@ const InputDialog = ({ isOpen, onClose, day }: InputDialogProps) => {
               <Input autoFocus onChange={e => setName(e.target.value)} placeholder="e.g. 7pm Dinner at Bob's" />
             </FormControl>
 
-            <FormControl isRequired>
-              <FormLabel id="time">Time</FormLabel>
-              <Input onChange={e => setTime(e.target.value)} type="time" />
-            </FormControl>
+            <HStack justify="space-between" w="full">
+              <FormControl isRequired>
+                <FormLabel id="start-time">Start</FormLabel>
+                <Input onChange={e => setStartTime(e.target.value)} type="time" />
+              </FormControl>
+              <FormControl isRequired>
+                <FormLabel id="finish-time">Finish</FormLabel>
+                <Input onChange={e => setFinishTime(e.target.value)} type="time" />
+              </FormControl>
+            </HStack>
 
             <FormControl isRequired>
               <FormLabel htmlFor="emails">Invitees</FormLabel>
@@ -83,7 +91,7 @@ const InputDialog = ({ isOpen, onClose, day }: InputDialogProps) => {
             Cancel
           </Button>
           <Button colorScheme="blue" onClick={handleOnSubmit}>
-            Submit
+            Save
           </Button>
         </ModalFooter>
       </ModalContent>

@@ -11,7 +11,10 @@ export type Calendar = {
 
 export type Event = {
   name: string
-  time: string
+  time: {
+    start: string
+    end: string
+  }
   invitees: string[]
   color?: string
   id?: string
