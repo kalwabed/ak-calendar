@@ -25,12 +25,22 @@ const DateContent = ({
         bgColor={!isCurrentMonth && '#f0f0f0'}
         color={!isCurrentMonth && 'rgb(165, 164, 164)'}
       >
-        <Text alignSelf="flex-end" padding={4} fontWeight="bold" rounded={isToday && 'md'} color={isToday && 'red'}>
+        <Text
+          alignSelf="flex-end"
+          p={2}
+          px={2.5}
+          m={1}
+          fontWeight="bold"
+          rounded={isToday && 'full'}
+          color={isToday && 'white'}
+          w="fit-content"
+          bgColor={isToday && 'blue.500'}
+        >
           {day}
         </Text>
       </chakra.button>
       <VStack mt={14} align="center" justify="center" px={2}>
-        {events.map(ev => (
+        {events?.map(ev => (
           <Button
             isFullWidth
             key={ev.name}

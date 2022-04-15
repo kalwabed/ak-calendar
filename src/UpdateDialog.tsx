@@ -48,10 +48,6 @@ const UpdateDialog = ({ isOpen, onClose, day, event }: UpdateDialogProps) => {
   }
 
   const handleOnSubmit = () => {
-    console.log('name', name)
-    console.log('startTime', startTime)
-    console.log('finishTime', finishTime)
-    console.log('inviteesEmail', inviteesEmail)
     if (!name || !startTime || !finishTime || inviteesEmail.length === 0) {
       toast({ status: 'error', title: 'Please fill all fields', position: 'top' })
       return
