@@ -14,4 +14,5 @@ export type Event = {
   time: string
   invitees: string[]
   color?: string
+  id?: string
 }

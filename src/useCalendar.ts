@@ -14,13 +14,23 @@ export const useCalendar = () => {
 
     if (day) {
       event.color = colorStocks[day.events.length ?? 0]
+      event.id = crypto.randomUUID()
       day.events.push(event)
       setCalendar(newCalendar)
     }
   }
 
-  const handleSetCalendar = (calendar: Calendar[]) => {
-    setCalendar(calendar)
+  const updateEvent = (updatedEvent: Event, dayId: string) => {
+    const newCalendar = [...calendar]
+    const day = newCalendar.find(day => day.id == dayId)
+
+    if (day) {
+      const eventIndex = day.events.findIndex(e => e.id == updatedEvent.id)
+      if (eventIndex >= 0) {
+        day.events[eventIndex] = updatedEvent
+        setCalendar(newCalendar)
+      }
+    }
   }
 
   const initialCalendar = () => {
@@ -62,13 +72,14 @@ export const useCalendar = () => {
       }
     }
 
-    handleSetCalendar(calendar)
+    setCalendar(calendar)
   }
 
   return {
     addEvent,
+    updateEvent,
     initialCalendar,
-    setCalendar: handleSetCalendar,
+    setCalendar,
     calendar
   }
 }

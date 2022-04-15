@@ -1,19 +1,38 @@
 import { useEffect, useState } from 'react'
-import { Box, useDisclosure } from '@chakra-ui/react'
+import { Box, Heading, useDisclosure, useToast } from '@chakra-ui/react'
 
 import InputDialog from './InputDialog'
-import { Calendar } from './types'
+import { Calendar, Event } from './types'
 import DateContent from './DateContent'
 import { useCalendar } from './useCalendar'
+import UpdateDialog from './UpdateDialog'
 
 function App() {
   const { isOpen, onClose, onOpen } = useDisclosure()
+  const { isOpen: updateIsOpen, onClose: updateOnClose, onOpen: updateOnOpen } = useDisclosure()
   const [selectedDay, setSelectedDay] = useState<Calendar>()
+  const [selectedEvent, setSelectedEvent] = useState<Event>()
   const { calendar, initialCalendar } = useCalendar()
+  const toast = useToast()
 
   const handleOpenInputModal = (day: Calendar) => {
+    if (day.events.length === 3) {
+      toast({
+        status: 'warning',
+        position: 'top',
+        title: 'You can only add 3 events per day',
+        duration: 3000
+      })
+      return
+    }
     setSelectedDay(day)
     onOpen()
+  }
+
+  const handleOpenUpdateModal = (day: Calendar, event: Event) => {
+    setSelectedDay(day)
+    setSelectedEvent(event)
+    updateOnOpen()
   }
 
   useEffect(() => {
@@ -23,15 +42,15 @@ function App() {
   }, [])
 
   return (
-    <div className="App">
+    <Box p={8}>
+      <Heading>{new Intl.DateTimeFormat('en-US', { month: 'long', year: 'numeric' }).format(new Date())}</Heading>
       <Box
         as="header"
         textAlign="center"
         display="grid"
         gridTemplateColumns="repeat(7, minmax(250px, 1fr))"
-        padding={8}
-        pb={0}
-        fontWeight="medium"
+        fontWeight="bold"
+        mt={4}
       >
         <p>Monday</p>
         <p>Tuesday</p>
@@ -43,12 +62,18 @@ function App() {
       </Box>
 
       <InputDialog isOpen={isOpen} onClose={onClose} day={selectedDay} />
-      <Box textAlign="center" display="grid" gridTemplateColumns="repeat(7, minmax(250px, 1fr))" px={8} py={6}>
+      <UpdateDialog event={selectedEvent} day={selectedDay} isOpen={updateIsOpen} onClose={updateOnClose} />
+      <Box textAlign="center" display="grid" gridTemplateColumns="repeat(7, minmax(250px, 1fr))">
         {calendar.map((cal, i) => (
-          <DateContent key={cal.id} calendar={cal} handleOpenModal={handleOpenInputModal} />
+          <DateContent
+            key={cal.id}
+            calendar={cal}
+            handleOpenInputModal={handleOpenInputModal}
+            handleOpenUpdateModal={handleOpenUpdateModal}
+          />
         ))}
       </Box>
-    </div>
+    </Box>
   )
 }
 

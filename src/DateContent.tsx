@@ -1,13 +1,15 @@
 import { Box, Text, chakra, Button, VStack } from '@chakra-ui/react'
 
-import { Calendar } from './types'
+import { Calendar, Event } from './types'
 
 const DateContent = ({
   calendar,
-  handleOpenModal
+  handleOpenInputModal,
+  handleOpenUpdateModal
 }: {
   calendar: Calendar
-  handleOpenModal: (cal: Calendar) => void
+  handleOpenInputModal: (cal: Calendar) => void
+  handleOpenUpdateModal: (cal: Calendar, event: Event) => void
 }) => {
   const { day, isCurrentMonth, isToday, events } = calendar
 
@@ -19,7 +21,7 @@ const DateContent = ({
         pos="absolute"
         inset={0}
         w="full"
-        onClick={() => handleOpenModal(calendar)}
+        onClick={() => handleOpenInputModal(calendar)}
         bgColor={!isCurrentMonth && '#f0f0f0'}
         color={!isCurrentMonth && 'rgb(165, 164, 164)'}
       >
@@ -34,7 +36,7 @@ const DateContent = ({
             key={ev.name}
             variant="ghost"
             size="xs"
-            onClick={() => alert('ye')}
+            onClick={() => handleOpenUpdateModal(calendar, ev)}
             justifyContent="start"
             overflow="hidden"
             textOverflow="ellipsis"
