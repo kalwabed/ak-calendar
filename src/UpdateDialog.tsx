@@ -14,7 +14,7 @@ import {
   useToast,
   VStack
 } from '@chakra-ui/react'
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { OnChangeValue } from 'react-select'
 import Select from 'react-select/creatable'
 
@@ -32,10 +32,10 @@ interface UpdateDialogProps {
 const UpdateDialog = ({ isOpen, onClose, day, event }: UpdateDialogProps) => {
   if (!event || !day) return null
 
-  const [inviteesEmail, setInviteesEmail] = useState(event.invitees)
-  const [name, setName] = useState(event.name)
-  const [startTime, setStartTime] = useState(event.time.start)
-  const [finishTime, setFinishTime] = useState(event.time.end)
+  const [inviteesEmail, setInviteesEmail] = useState<string[]>()
+  const [name, setName] = useState<string>()
+  const [startTime, setStartTime] = useState<string>()
+  const [finishTime, setFinishTime] = useState<string>()
   const { updateEvent, deleteEvent } = useCalendar()
   const toast = useToast()
 
@@ -63,6 +63,13 @@ const UpdateDialog = ({ isOpen, onClose, day, event }: UpdateDialogProps) => {
     onClose()
     toast({ status: 'success', title: 'Event deleted', position: 'top' })
   }
+
+  useEffect(() => {
+    setName(event.name)
+    setStartTime(event.time.start)
+    setFinishTime(event.time.end)
+    setInviteesEmail(event.invitees)
+  }, [event])
 
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
