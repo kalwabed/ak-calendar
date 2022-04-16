@@ -1,9 +1,8 @@
 import { useAtom } from 'jotai'
+import { random } from '@ctrl/tinycolor'
 
 import { calendarState } from './store'
 import { Calendar, Event } from './types'
-
-const colorStocks = ['#ef5b5b', '#20a39e', '#ffba49']
 
 export const useCalendar = () => {
   const [calendar, setCalendar] = useAtom(calendarState)
@@ -13,7 +12,7 @@ export const useCalendar = () => {
     const day = newCalendar.find(day => day.id == dayId)
 
     if (day) {
-      event.color = colorStocks[day.events.length ?? 0]
+      event.color = random({ hue: 'random', luminosity: 'random' }).toHexString()
       event.id = crypto.randomUUID()
       day.events.push(event)
       setCalendar(newCalendar)

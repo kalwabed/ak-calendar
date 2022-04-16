@@ -31,10 +31,11 @@ const DateContent = ({
           px={2.5}
           m={1}
           fontWeight="bold"
-          rounded={isToday && 'full'}
+          rounded="full"
           color={isToday && 'white'}
           w="fit-content"
-          bgColor={isToday && 'blue.500'}
+          bgColor={isToday ? 'blue.500' : 'transparent'}
+          _hover={{ bgColor: isToday ? 'blue.600' : 'gray.200' }}
         >
           {day}
         </Text>
