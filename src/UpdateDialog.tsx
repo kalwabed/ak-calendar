@@ -36,7 +36,7 @@ const UpdateDialog = ({ isOpen, onClose, day, event }: UpdateDialogProps) => {
   const [name, setName] = useState(event.name)
   const [startTime, setStartTime] = useState(event.time.start)
   const [finishTime, setFinishTime] = useState(event.time.end)
-  const { updateEvent } = useCalendar()
+  const { updateEvent, deleteEvent } = useCalendar()
   const toast = useToast()
 
   const options = useMemo(() => {
@@ -56,6 +56,12 @@ const UpdateDialog = ({ isOpen, onClose, day, event }: UpdateDialogProps) => {
     updateEvent({ ...event, name, time: { start: startTime, end: finishTime }, invitees: inviteesEmail }, day.id)
     onClose()
     toast({ status: 'success', title: 'Event updated', position: 'top' })
+  }
+
+  const handleOnDelete = () => {
+    deleteEvent(event.id, day.id)
+    onClose()
+    toast({ status: 'success', title: 'Event deleted', position: 'top' })
   }
 
   return (
@@ -95,11 +101,11 @@ const UpdateDialog = ({ isOpen, onClose, day, event }: UpdateDialogProps) => {
         </ModalBody>
 
         <ModalFooter>
-          <Button variant="ghost" mr={3} onClick={onClose}>
-            Cancel
+          <Button size="sm" justifySelf="self-start" variant="ghost" colorScheme="red" mr={3} onClick={handleOnDelete}>
+            Delete
           </Button>
           <Button colorScheme="blue" onClick={handleOnSubmit}>
-            Submit
+            Save
           </Button>
         </ModalFooter>
       </ModalContent>

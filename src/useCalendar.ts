@@ -75,9 +75,23 @@ export const useCalendar = () => {
     setCalendar(calendar)
   }
 
+  const deleteEvent = (eventId: string, dayId: string): void => {
+    const newCalendar = [...calendar]
+    const day = newCalendar.find(day => day.id == dayId)
+
+    if (day) {
+      const eventIndex = day.events.findIndex(e => e.id == eventId)
+      if (eventIndex >= 0) {
+        day.events.splice(eventIndex, 1)
+        setCalendar(newCalendar)
+      }
+    }
+  }
+
   return {
     addEvent,
     updateEvent,
+    deleteEvent,
     initialCalendar,
     setCalendar,
     calendar
