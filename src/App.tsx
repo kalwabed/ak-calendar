@@ -48,7 +48,8 @@ function App() {
         as="header"
         textAlign="center"
         display="grid"
-        gridTemplateColumns="repeat(7, minmax(250px, 1fr))"
+        overflow="hidden"
+        gridTemplateColumns={['repeat(7, minmax(50px, 1fr))', 'repeat(7, minmax(13.7vw, 1fr))']}
         fontWeight="bold"
         mt={4}
       >
@@ -63,7 +64,12 @@ function App() {
 
       <InputDialog isOpen={isOpen} onClose={onClose} day={selectedDay} />
       <UpdateDialog event={selectedEvent} day={selectedDay} isOpen={updateIsOpen} onClose={updateOnClose} />
-      <Box textAlign="center" display="grid" gridTemplateColumns="repeat(7, minmax(250px, 1fr))">
+      <Box
+        textAlign="center"
+        display="grid"
+        overflow="auto"
+        gridTemplateColumns={['repeat(7, minmax(200px, 1fr))', 'repeat(7, minmax(13.7vw, 1fr))']}
+      >
         {calendar.map((cal, i) => (
           <DateContent
             key={cal.id}
