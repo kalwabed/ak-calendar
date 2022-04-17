@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { Box, Heading, useDisclosure, useToast } from '@chakra-ui/react'
+import { Box, Button, Flex, Heading, useDisclosure, useToast } from '@chakra-ui/react'
 
 import InputDialog from './InputDialog'
 import { Calendar, Event } from './types'
@@ -12,7 +12,7 @@ function App() {
   const { isOpen: updateIsOpen, onClose: updateOnClose, onOpen: updateOnOpen } = useDisclosure()
   const [selectedDay, setSelectedDay] = useState<Calendar>()
   const [selectedEvent, setSelectedEvent] = useState<Event>()
-  const { calendar, initialCalendar } = useCalendar()
+  const { calendar, initialCalendar, resetTodayStatus } = useCalendar()
   const toast = useToast()
 
   const handleOpenInputModal = (day: Calendar) => {
@@ -43,7 +43,13 @@ function App() {
 
   return (
     <Box p={8}>
-      <Heading>{new Intl.DateTimeFormat('en-US', { month: 'long', year: 'numeric' }).format(new Date())}</Heading>
+      <Flex align="center" gap={8}>
+        <Heading>{new Intl.DateTimeFormat('en-US', { month: 'long', year: 'numeric' }).format(new Date())}</Heading>
+
+        <Button variant="outline" onClick={resetTodayStatus}>
+          Today
+        </Button>
+      </Flex>
       <Box
         as="header"
         textAlign="center"

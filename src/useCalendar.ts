@@ -87,11 +87,37 @@ export const useCalendar = () => {
     }
   }
 
+  const resetTodayStatus = () => {
+    const newCalendar = [...calendar]
+    const todayDate = new Date().getDate()
+    const todayMonth = new Date().getMonth()
+    const todayYear = new Date().getFullYear()
+
+    const calendarWithResettedToday = newCalendar.map(cal => {
+      if (cal.isToday) {
+        cal.isToday = false
+
+        return cal
+      }
+
+      if (cal.day === todayDate && cal.month === todayMonth && cal.year === todayYear) {
+        cal.isToday = true
+
+        return cal
+      }
+
+      return cal
+    })
+
+    setCalendar(calendarWithResettedToday)
+  }
+
   return {
     addEvent,
     updateEvent,
     deleteEvent,
     initialCalendar,
+    resetTodayStatus,
     setCalendar,
     calendar
   }

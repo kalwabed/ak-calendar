@@ -28,7 +28,6 @@ interface UpdateDialogProps {
   event: Event
 }
 
-// TODO: handle color change
 const UpdateDialog = ({ isOpen, onClose, day, event }: UpdateDialogProps) => {
   if (!event || !day) return null
 
